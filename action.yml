@@ -1,5 +1,6 @@
 name: "Standardize Version 🔢"
-description: "Convert a version string from SemVer-alike into a standard human-readable format, suitable for release names/tags."
+description: "Convert a version string from SemVer-alike into the standard human-readable format, suitable for release names/tags."
+author: "Lex Darlog"
 
 branding:
   # https://feathericons.com/

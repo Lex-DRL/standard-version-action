@@ -70,6 +70,9 @@ _re_whole_version = re.compile(  # Whole version string -> num/suffix groups
 	r')?$',
 	flags=re.IGNORECASE
 ).match
+# Python's re.match acts weirdly with groups
+# when a (possibly recurring) group is inside non-capturing optional one.
+# Thus, we have to extract segments in a loop, one by one:
 _re_number_seg = re.compile(  # Parse only numeric group into actual numbers
 	r'(?P<first>[0-9]+)'  # First number
 	r'(?:'
@@ -201,6 +204,8 @@ def _cleanup_version_arg(version_arg: _A, sysarg_id=1) -> str:
 
 def _cleanup_output_arg(output_arg: _A, sysarg_id=2) -> _T_Path:
 	output = output_arg
+	if not(output is None or isinstance(output, (str, os.PathLike))):
+		output = str(output)
 	if not output:
 		print(
 			f"No output path ({output!r}) is specified as function argument - checking if argument is passed to the script..."
@@ -214,8 +219,6 @@ def _cleanup_output_arg(output_arg: _A, sysarg_id=2) -> _T_Path:
 			output = os.environ.get("GITHUB_OUTPUT")
 		except Exception:
 			output = None
-	if not(output is None or isinstance(output, (str, os.PathLike))):
-		output = str(output)
 	if not output:
 		raise ValueError(f"Output must be specified in SOME way. Got: {output!r}")
 	assert isinstance(output, (str, os.PathLike)) and output

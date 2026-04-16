@@ -2,7 +2,7 @@
   
 # Standardize Version 🔢 Action
 
-**A GitHub action converting a version string into a standard format, suitable for release names/tags.**<br />
+**A GitHub action converting a version string into the standard format, suitable for release names/tags.**<br />
 </div>
 
 - Handles `v` prefix.
@@ -44,17 +44,17 @@ Add it as an intermediate step in your workflow job:
 
 ## Inputs
 
-- `version` - The raw version string to normalize: `0.1` / `v.1.2.3a1` / `v5`.
+- `version` - The raw version string to standardize: `0.1` / `v.1.2.3a1` / `v5`.
 - [optional] `python-version` - You could specify the python version to use inside the action run. Defaults to the latest python 3.
 - [optional] `skip-python-setup` - If you already have a `setup-python` action in the caller, set this input to anything except for `false` or empty string - to disable a (redundant) python setup.
   - Makes `python-version` irrelevant.
 
 ## Outputs
 - `v` - Full version + "v" prefix - recommended for 🏷️ release name/tag: `v0.1` / `v1.2.3-alpha1`.
-- `full` - Full version without "v" prefix: `0.1` / `1.2.3-alpha1`
-- `number` - Only the main numeric version without suffix: `0.1` / `1.2.3`
-- `suffix` - The optional last sub-version suffix/specifier. Example: `""` / `alpha1`.
-- `is-pre` - Is the version detected as pre-release (alpha/beta/RC): `false` / `true`
+- `full` - Full version without "v" prefix: `0.1` / `1.2.3-alpha1`.
+- `number` - Only the main numeric version without suffix: `0.1` / `1.2.3`.
+- `suffix` - The optional last sub-version suffix/specifier: `""` / `alpha1`.
+- `is-pre` - Is the version detected as pre-release (alpha/beta/RC): `false` / `true`.
 
 ## Log
 
