@@ -1,0 +1,58 @@
+name: "Standardize Version 🔢"
+description: "Convert a version string from SemVer-alike into a standard human-readable format, suitable for release names/tags."
+
+branding:
+  # https://feathericons.com/
+  icon: tag
+#  icon: package
+#  icon: code
+  color: gray-dark
+
+inputs:
+  version:
+    description: 'Version string to standardize. Something like: "1.2.3a1"'
+    required: true
+  python-version:
+    description: 'Python version to use internally'
+    required: false
+    default: '3.x'
+  skip-python-setup:
+    description: 'Skip setup-python step if caller already did it'
+    required: false
+    default: 'false'
+
+outputs:
+  v:
+    description: 'Full version + "v" prefix - recommended for release name/tag: "v0.1" / "v1.2.3-alpha1"'
+    value: ${{ steps.standardize.outputs.v }}
+  full:
+    description: 'Full version without "v" prefix: "0.1" / "1.2.3-alpha1"'
+    value: ${{ steps.standardize.outputs.full }}
+  number:
+    description: 'Main numeric version without suffix: "0.1" / "1.2.3"'
+    value: ${{ steps.standardize.outputs.number }}
+  suffix:
+    description: '[Optional] last sub-version suffix. Example: "" / "alpha1"'
+    value: ${{ steps.standardize.outputs.suffix }}
+  is-pre:
+    description: 'Is the version detected as pre-release (alpha/beta/RC)? Example: "false" / "true"'
+    value: ${{ steps.standardize.outputs.is_pre }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      if: inputs.skip-python-setup == 'false' || inputs.skip-python-setup == ''
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+#        cache: 'pip'
+#
+#    - name: Install PIP requirements
+#      shell: bash
+#      run: pip install tomli
+
+    - name: Parse and standardize version 🔢
+      id: standardize
+      shell: bash
+      run: python '${{ github.action_path }}/standardize_version.py' '${{ inputs.version }}' "$GITHUB_OUTPUT"
